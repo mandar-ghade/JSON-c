@@ -12,10 +12,14 @@ typedef enum {
     Null,
 } Identifier;
 
-typedef struct {
+typedef struct Attribute Attribute;
+
+struct Attribute {
     void *attr;
     Identifier type;
-} Attribute;
+    Attribute (*get)(void *attribute, char *key);
+    Attribute (*index)(void *attribute, size_t index);
+};
 
 typedef struct {
     Vec attrs; // Vector of attributes.

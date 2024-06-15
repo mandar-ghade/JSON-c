@@ -11,10 +11,14 @@ typedef enum {
     Null,
 } Identifier;
 
-typedef struct {
+typedef struct Attribute Attribute;
+
+struct Attribute {
     void *attr;
     Identifier type;
-} Attribute;
+    Attribute (*get)(void *attribute, char *key);
+    Attribute (*index)(void *attribute, size_t index);
+};
 
 typedef struct {
     Vec attrs; // Vector of attributes.
@@ -155,13 +159,39 @@ void push_to_object(Object *object, Json *json) {
     push_to_vec(&object->pairs, json);
 }
 
+Attribute index_from_attr(void *attribute, size_t index);
+
+Attribute get_from_attr(void *attribute, char *key);
+
 Attribute null_attr() {
     Attribute attr = {
         .attr = NULL,
-        .type = Null
+        .type = Null,
+        .get = get_from_attr,
+        .index = index_from_attr
     };
     return attr;
 }
+
+Attribute index_from_attr(void *attribute, size_t index) {
+    Attribute *attr = (Attribute*)attribute;
+    Attribute res = null_attr();
+    if (attr != NULL && attr->type == Array_T) {
+        Attribute attr_res = ((Array*)attr->attr)->index(attr->attr, index);
+        res = attr_res;
+    }
+    return res;
+}
+Attribute get_from_attr(void *attribute, char *key) {
+    Attribute *attr = (Attribute*)attribute;
+    Attribute res = null_attr();
+    if (attr != NULL && attr->type == Object_T) {
+        Attribute attr_res = ((Object*)attr->attr)->get(attr->attr, key);
+        res = attr_res;
+    }
+    return res;
+}
+
 
 Attribute *get_attr_from_vec(const Vec *vec, size_t index) {
     if (index > vec->len) {
@@ -242,7 +272,9 @@ Json new_json(String *key, Attribute *value) {
 Attribute new_attr(void *attr, Identifier type) {
     Attribute attribute = {
         .attr = attr,
-        .type = type
+        .type = type,
+        .get = get_from_attr,
+        .index = index_from_attr
     };
     return attribute;
 }
