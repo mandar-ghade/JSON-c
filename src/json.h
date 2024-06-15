@@ -19,11 +19,13 @@ struct Attribute {
     Identifier type;
     Attribute (*get)(void *attribute, char *key);
     Attribute (*index)(void *attribute, size_t index);
+    Iterator (*iter)(void *array);
 };
 
 typedef struct {
     Vec attrs; // Vector of attributes.
     Attribute (*index)(void *array, size_t index);
+    Iterator (*iter)(void *array);
 } Array;
 
 typedef struct {
@@ -34,13 +36,19 @@ typedef struct {
 typedef struct {
     Vec pairs; // Vector of Json structs.
     Attribute (*get)(void *object, char *key);
+    Iterator (*iter)(void *object);
 } Object;
 
 void *index_object(Object *object);
 
-void print_object(Object *object); 
 
 void print_attr(Attribute *attr); 
+
+void print_json(Json *json); // for debugging and iterating
+
+void print_array(Array *array); // for debugging and iterating
+
+void print_object(Object *object); 
 
 void push_to_array(Array *array, Attribute *attr); 
 

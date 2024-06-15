@@ -12,6 +12,8 @@ typedef struct {
 
 Iterator new_iter(void *collection, size_t element_size, size_t len); 
 
+Iterator empty_iter();
+
 bool has_next(Iterator *it); 
 
 void *next(Iterator *it); 

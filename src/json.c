@@ -1,5 +1,6 @@
 #include "string.h"
 #include "vec.h"
+#include "iterator.h"
 #include <stdbool.h>
 
 typedef enum {
@@ -16,13 +17,15 @@ typedef struct Attribute Attribute;
 struct Attribute {
     void *attr;
     Identifier type;
-    Attribute (*get)(void *attribute, char *key);
-    Attribute (*index)(void *attribute, size_t index);
+    Attribute (*get)(void *attribute, char *key); // IF Json
+    Attribute (*index)(void *attribute, size_t index); // IF Array
+    Iterator (*iter)(void *array);
 };
 
 typedef struct {
     Vec attrs; // Vector of attributes.
     Attribute (*index)(void *array, size_t index);
+    Iterator (*iter)(void *array);
 } Array;
 
 typedef struct {
@@ -33,6 +36,7 @@ typedef struct {
 typedef struct {
     Vec pairs; // Vector of Json structs.
     Attribute (*get)(void *object, char *key);
+    Iterator (*iter)(void *object);
 } Object;
 
 void print_attr(Attribute *attr);
@@ -163,14 +167,32 @@ Attribute index_from_attr(void *attribute, size_t index);
 
 Attribute get_from_attr(void *attribute, char *key);
 
+Iterator iter_from_attr(void *attribute);
+
 Attribute null_attr() {
     Attribute attr = {
         .attr = NULL,
         .type = Null,
         .get = get_from_attr,
-        .index = index_from_attr
+        .index = index_from_attr,
+        .iter = iter_from_attr
     };
     return attr;
+}
+
+Iterator iter_array(void *array); 
+
+Iterator iter_object(void *object); 
+
+Iterator iter_from_attr(void *attribute) {
+    Attribute *attr = (Attribute*)attribute;
+    if (attr != NULL && attr->type == Array_T) {
+        return iter_array((Array*)attr->attr);
+    }
+    if (attr != NULL && attr->type == Object_T) {
+        return iter_object((Object*)attr->attr);
+    }
+    return empty_iter();
 }
 
 Attribute index_from_attr(void *attribute, size_t index) {
@@ -200,6 +222,11 @@ Attribute *get_attr_from_vec(const Vec *vec, size_t index) {
     return (Attribute*)get_value(vec, index);
 }
 
+Iterator iter_array(void *array) {
+    Iterator it = iter_from_vec(&((Array*)array)->attrs);
+    return it;
+}
+
 Attribute index_array(void *array, size_t index) {
     Array *arr = (Array*)array;
     Attribute *attribute = get_attr_from_vec(&arr->attrs, index);
@@ -213,6 +240,7 @@ Array new_array() {
     Array array = {
         .attrs = new_vec(sizeof(Attribute)),
         .index = index_array,
+        .iter = iter_array
     };
     return array;
 }
@@ -221,7 +249,13 @@ Array *new_heap_array() {
     Array *array = (Array*)malloc(sizeof(Array));
     array->attrs = new_vec(sizeof(Attribute));
     array->index = index_array;
+    array->iter = iter_array;
     return array;
+}
+
+Iterator iter_object(void *object) {
+    Iterator it = iter_from_vec(&((Object*)object)->pairs);
+    return it;
 }
 
 Json *get_json_from_vec(const Vec *vec, char *key) {
@@ -250,6 +284,7 @@ Object new_object() {
     Object object = {
         .pairs = new_vec(sizeof(Json)),
         .get = get,
+        .iter = iter_object
     };
     return object;
 }
@@ -258,6 +293,7 @@ Object *new_heap_object() {
     Object *object = (Object*)malloc(sizeof(Object));
     object->pairs = new_vec(sizeof(Json));
     object->get = get;
+    object->iter = iter_object;
     return object;
 }
 

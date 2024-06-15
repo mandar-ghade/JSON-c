@@ -19,6 +19,16 @@ Iterator new_iter(void *collection, size_t element_size, size_t len) {
     return iterator;
 }
 
+Iterator empty_iter() {
+    Iterator iterator = {
+        .collection = NULL,
+        .position = 0,
+        .len = 0,
+        .element_size = 0
+    };
+    return iterator;
+}
+
 bool has_next(Iterator *it) {
     return it->position < it->len;
 }

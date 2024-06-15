@@ -160,20 +160,15 @@ int main() {
     Object *json_object = parse(&it); // parses iterator of tokens to Json object.
     print_object(json_object);
     printf("\n");
-//     print_token_vec(&token_vec);
-    Attribute array = json_object->get(json_object, "skills");
-    Attribute json_0 = array.index(&array, 0);
-    Attribute type_0 = json_0.get(&json_0, "type");
-    Attribute subtype_0 = json_0.get(&json_0, "subtype");
-    Attribute description = json_0.get(&json_0, "description");
-    print_attr(&json_0);
-    printf("\n");
-    print_attr(&type_0);
-    printf("\n");
-    print_attr(&subtype_0);
-    printf("\n");
-    print_attr(&description);
-    printf("\n");
+    Iterator json_iter = json_object->iter(json_object);
+    printf("\nObject iteration example: \n\n");
+    for (Json *pair = next(&json_iter); pair != NULL; pair = next(&json_iter)) {
+        printf("Key: ");
+        print(&pair->key);
+        printf(" Value: ");
+        print_attr(&pair->value);
+        printf("\n");
+    }
     free_object(json_object);
     free_token_vec(&token_vec);
     reset_str(&json_str);
