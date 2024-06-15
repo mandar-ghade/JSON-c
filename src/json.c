@@ -18,6 +18,7 @@ typedef struct {
 
 typedef struct {
     Vec attrs; // Vector of attributes.
+    Attribute (*index)(void *array, size_t index);
 } Array;
 
 typedef struct {
@@ -27,14 +28,13 @@ typedef struct {
 
 typedef struct {
     Vec pairs; // Vector of Json structs.
+    Attribute (*get)(void *object, char *key);
 } Object;
-
-void *index_object(Object *object);
 
 void print_attr(Attribute *attr);
 
 void print_json(Json *json) {
-    print_raw(&json->key);
+    print(&json->key);
     printf(": ");
     print_attr(&json->value);
 }
@@ -76,7 +76,7 @@ void print_attr(Attribute *attr) {
             print_object((Object*)attr->attr);
             break;
         case String_T:
-            print_raw((String*)attr->attr);
+            print((String*)attr->attr);
             break;
         case Number:
             print_raw((String*)attr->attr);
@@ -155,9 +155,34 @@ void push_to_object(Object *object, Json *json) {
     push_to_vec(&object->pairs, json);
 }
 
+Attribute null_attr() {
+    Attribute attr = {
+        .attr = NULL,
+        .type = Null
+    };
+    return attr;
+}
+
+Attribute *get_attr_from_vec(const Vec *vec, size_t index) {
+    if (index > vec->len) {
+        return NULL;
+    }
+    return (Attribute*)get_value(vec, index);
+}
+
+Attribute index_array(void *array, size_t index) {
+    Array *arr = (Array*)array;
+    Attribute *attribute = get_attr_from_vec(&arr->attrs, index);
+    if (attribute != NULL) {
+        return *attribute;
+    }
+    return null_attr();
+}
+
 Array new_array() {
     Array array = {
-        .attrs = new_vec(sizeof(Attribute))
+        .attrs = new_vec(sizeof(Attribute)),
+        .index = index_array,
     };
     return array;
 }
@@ -165,12 +190,36 @@ Array new_array() {
 Array *new_heap_array() {
     Array *array = (Array*)malloc(sizeof(Array));
     array->attrs = new_vec(sizeof(Attribute));
+    array->index = index_array;
     return array;
+}
+
+Json *get_json_from_vec(const Vec *vec, char *key) {
+    String key_str = new_string(key);
+    Json *json = NULL;
+    for (size_t i = 0; i < vec->len; i++) {
+        json = (Json*)get_value(vec, i);
+        if (json != NULL && are_equal(&key_str, &json->key)) {
+            break;
+        }
+    }
+    reset_str(&key_str);
+    return json;
+}
+
+Attribute get(void *object, char *key) {
+    Object *obj = (Object*) object;
+    Json *json = get_json_from_vec(&obj->pairs, key);
+    if (json != NULL) {
+        return json->value;
+    }
+    return null_attr();
 }
 
 Object new_object() {
     Object object = {
-        .pairs = new_vec(sizeof(Json))
+        .pairs = new_vec(sizeof(Json)),
+        .get = get,
     };
     return object;
 }
@@ -178,6 +227,7 @@ Object new_object() {
 Object *new_heap_object() {
     Object *object = (Object*)malloc(sizeof(Object));
     object->pairs = new_vec(sizeof(Json));
+    object->get = get;
     return object;
 }
 

@@ -160,8 +160,11 @@ int main() {
     Object *json_object = parse(&it); // parses iterator of tokens to Json object.
     print_object(json_object);
     printf("\n");
-    free_object(json_object);
 //     print_token_vec(&token_vec);
+    Attribute name = json_object->get(json_object, "name");
+    print_attr(&name);
+    printf("\n");
+    free_object(json_object);
     free_token_vec(&token_vec);
     reset_str(&json_str);
     return 0;

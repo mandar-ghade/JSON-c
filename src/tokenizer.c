@@ -211,8 +211,9 @@ void concatenate_into_token_str(Iterator *it, char *ptr, String *token_str, Toke
         }
 
         if (token_type == String_Type) {
-            push(token_str, character);
             if (*token_found) break;
+            if ((q_count > 1 && character == '"') || 
+                (character != '"')) push(token_str, character);
         } else if (*token_found && token_type == Number_T) {
             break;
         } else if (!*token_found && token_type == Number_T) {

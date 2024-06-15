@@ -19,6 +19,7 @@ typedef struct {
 
 typedef struct {
     Vec attrs; // Vector of attributes.
+    Attribute (*index)(void *array, size_t index);
 } Array;
 
 typedef struct {
@@ -28,11 +29,14 @@ typedef struct {
 
 typedef struct {
     Vec pairs; // Vector of Json structs.
+    Attribute (*get)(void *object, char *key);
 } Object;
 
 void *index_object(Object *object);
 
 void print_object(Object *object); 
+
+void print_attr(Attribute *attr); 
 
 void push_to_array(Array *array, Attribute *attr); 
 
