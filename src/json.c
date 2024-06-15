@@ -111,10 +111,8 @@ void free_attr(Attribute *attr) {
             free_object((Object*)attr->attr);
             break;
         case String_T:
-//             free(((String*)attr->attr)->vec.data); // frees string data.
             break;
         case Number:
-//             free(((String*)attr->attr)->vec.data); // also frees string data.
             break;
         case Bool:
             free(attr->attr);
@@ -125,7 +123,6 @@ void free_attr(Attribute *attr) {
 }
 
 void free_json(Json *json) {
-//     free(json->key.vec.data); // frees string data.
     free_attr(&json->value);
 }
 
