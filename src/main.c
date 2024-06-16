@@ -15,6 +15,13 @@ char *read_file_to_buffer(FILE *f_ptr, char *file_name, char *buffer, size_t *bu
     return buffer;
 }
 
+void example_lookup(Object *json_object) {
+    printf("\nExample lookup: \n");
+    Attribute user_id_0 = get_from_attr(index_from_attr(get(json_object, "users"), 0), "user_id");
+    print_attr(&user_id_0);
+    printf("\n");
+}
+
 int main() {
     FILE *f_ptr;
     size_t FILE_NAME_BUFF = 50;
@@ -29,6 +36,7 @@ int main() {
     Object *json_object = parse(&it);
     print_object(json_object);
     printf("\n");
+    example_lookup(json_object);
     free_object(json_object);
     free_token_vec(&token_vec);
     reset_str(&buffer_str);
