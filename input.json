@@ -1,0 +1,174 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "timestamp": "2024-06-15T12:34:56Z",
+    "generated_by": {
+      "name": "AI Generator",
+      "id": "123e4567-e89b-12d3-a456-426614174000"
+    }
+  },
+  "data": {
+    "users": [
+      {
+        "id": "u1",
+        "profile": {
+          "name": "Alice",
+          "age": 30,
+          "email": "alice@example.com",
+          "preferences": {
+            "notifications": true,
+            "newsletter": false,
+            "theme": "dark"
+          },
+          "history": [
+            {
+              "login_dates": ["2024-01-01", "2024-03-15", "2024-06-10"],
+              "purchase_history": [
+                {"item": "Laptop", "amount": 1200.99, "currency": "USD"},
+                {"item": "Headphones", "amount": 299.99, "currency": "USD"}
+              ]
+            }
+          ]
+        },
+        "permissions": ["read", "write", "execute"]
+      },
+      {
+        "id": "u2",
+        "profile": {
+          "name": "Bob",
+          "age": 25,
+          "email": "bob@example.com",
+          "preferences": {
+            "notifications": false,
+            "newsletter": true,
+            "theme": "light"
+          },
+          "history": [
+            {
+              "login_dates": ["2024-02-10", "2024-04-12", "2024-06-01"],
+              "purchase_history": [
+                {"item": "Smartphone", "amount": 899.99, "currency": "USD"},
+                {"item": "Tablet", "amount": 499.99, "currency": "USD"}
+              ]
+            }
+          ]
+        },
+        "permissions": ["read"]
+      }
+    ],
+    "products": {
+      "categories": [
+        {
+          "id": "c1",
+          "name": "Electronics",
+          "items": [
+            {
+              "id": "p1",
+              "name": "Smartphone",
+              "specs": {
+                "dimensions": {"width": "7cm", "height": "15cm", "depth": "0.8cm"},
+                "features": ["Touchscreen", "Bluetooth", "GPS"],
+                "availability": true
+              }
+            },
+            {
+              "id": "p2",
+              "name": "Laptop",
+              "specs": {
+                "dimensions": {"width": "30cm", "height": "2cm", "depth": "20cm"},
+                "features": ["16GB RAM", "512GB SSD", "Touchscreen"],
+                "availability": false
+              }
+            }
+          ]
+        },
+        {
+          "id": "c2",
+          "name": "Home Appliances",
+          "items": [
+            {
+              "id": "p3",
+              "name": "Refrigerator",
+              "specs": {
+                "dimensions": {"width": "70cm", "height": "180cm", "depth": "60cm"},
+                "features": ["Energy Saving", "Smart Cooling", "Water Dispenser"],
+                "availability": true
+              }
+            },
+            {
+              "id": "p4",
+              "name": "Microwave",
+              "specs": {
+                "dimensions": {"width": "50cm", "height": "30cm", "depth": "40cm"},
+                "features": ["Convection", "Grill", "Defrost"],
+                "availability": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "transactions": [
+      {
+        "transaction_id": "t1",
+        "user_id": "u1",
+        "amount": 1500.98,
+        "currency": "USD",
+        "date": "2024-06-14T08:45:00Z",
+        "details": {
+          "items": [
+            {"id": "p1", "quantity": 1, "price": 899.99},
+            {"id": "p2", "quantity": 1, "price": 600.99}
+          ],
+          "shipping": {"method": "Express", "cost": 20.00, "currency": "USD"}
+        }
+      },
+      {
+        "transaction_id": "t2",
+        "user_id": "u2",
+        "amount": 1199.98,
+        "currency": "USD",
+        "date": "2024-06-14T10:15:00Z",
+        "details": {
+          "items": [
+            {"id": "p3", "quantity": 1, "price": 999.99},
+            {"id": "p4", "quantity": 1, "price": 199.99}
+          ],
+          "shipping": {"method": "Standard", "cost": 0.00, "currency": "USD"}
+        }
+      }
+    ],
+    "notifications": [
+      {
+        "notification_id": "n1",
+        "user_id": "u1",
+        "message": "Your order has been shipped!",
+        "date": "2024-06-15T10:00:00Z",
+        "read": true
+      },
+      {
+        "notification_id": "n2",
+        "user_id": "u2",
+        "message": "Your order is out for delivery",
+        "date": "2024-06-15T11:00:00Z",
+        "read": false
+      }
+    ]
+  },
+  "settings": {
+    "site": {
+      "theme": "dark",
+      "languages": ["en", "es", "fr"],
+      "timezone": "UTC"
+    },
+    "security": {
+      "password_policy": {
+        "min_length": 8,
+        "require_special": true,
+        "require_numbers": true,
+        "require_uppercase": true
+      },
+      "2fa": true
+    }
+  }
+}

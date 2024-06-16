@@ -41,7 +41,6 @@ typedef struct {
 
 void *index_object(Object *object);
 
-
 void print_attr(Attribute *attr); 
 
 void print_json(Json *json); // for debugging and iterating
