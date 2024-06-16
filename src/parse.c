@@ -160,7 +160,7 @@ int example_parsing() {
     Object *json_object = parse(&it); // parses iterator of tokens to Json object.
     print_object(json_object);
     printf("\n");
-    Iterator json_iter = json_object->iter(json_object);
+    Iterator json_iter = iter_object(json_object);
     printf("\nObject iteration example: \n\n");
     for (Json *pair = next(&json_iter); pair != NULL; pair = next(&json_iter)) {
         printf("Key: ");

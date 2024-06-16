@@ -12,20 +12,13 @@ typedef enum {
     Null,
 } Identifier;
 
-typedef struct Attribute Attribute;
-
-struct Attribute {
+typedef struct {
     void *attr;
     Identifier type;
-    Attribute (*get)(void *attribute, char *key);
-    Attribute (*index)(void *attribute, size_t index);
-    Iterator (*iter)(void *array);
-};
+} Attribute;
 
 typedef struct {
     Vec attrs; // Vector of attributes.
-    Attribute (*index)(void *array, size_t index);
-    Iterator (*iter)(void *array);
 } Array;
 
 typedef struct {
@@ -35,11 +28,21 @@ typedef struct {
 
 typedef struct {
     Vec pairs; // Vector of Json structs.
-    Attribute (*get)(void *object, char *key);
-    Iterator (*iter)(void *object);
 } Object;
 
-void *index_object(Object *object);
+Attribute index_from_attr(Attribute attr, size_t index);
+
+Attribute get_from_attr(Attribute attr, char *key);
+
+Iterator iter_from_attr(Attribute *attr);
+
+Attribute index_array(Array *arr, size_t index); 
+
+Iterator iter_array(void *array); 
+
+Iterator iter_object(void *object); 
+
+Attribute get(Object *obj, char *key); // returns attribute which holds value.
 
 void print_attr(Attribute *attr); 
 
