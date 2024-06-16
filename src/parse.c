@@ -153,7 +153,7 @@ Object *parse(Iterator *it) {
     return object;
 }
 
-int main() {
+int example_parsing() {
     String json_str = new_string("{\"name\":\"Mundar\",\"age\":19.2,\"mentalAge\":4,\"skills\":[{\"type\":\"language\",\"subtype\":\"spoken\",\"description\":\"English\"},{\"type\":\"language\",\"subtype\":\"coding\",\"description\":\"Python\"},{\"type\":\"language\",\"subtype\":\"coding\",\"description\":\"C\"},{\"type\":\"instrument\",\"subtype\":null,\"description\":\"Violin\"},{\"type\":\"instrument\",\"subtype\":null,\"description\":\"Piano\"}]}");
     Vec token_vec = tokenize(&json_str);
     Iterator it = iter_from_vec(&token_vec);

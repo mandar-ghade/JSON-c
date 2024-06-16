@@ -55,7 +55,11 @@ bool is_numeric(const char c) {
 
 void print_token(const Token *token) {
     printf("Token(%s, ", type_to_chars(token->type));
-    print_raw(token->value);
+    if (token->type == String_Type) {
+        print(token->value);
+    } else {
+        print_raw(token->value);
+    }
     printf(")");
 }
 
@@ -115,7 +119,8 @@ bool is_end_pair_delim(Token_T type) {
 char *next_non_space(Iterator *it) {
     char *peeked_char = peek(it);
     for (size_t i = 1; peeked_char != NULL; i++) {
-        if (*peeked_char != ' ') break;
+        if (*peeked_char != ' ' &&
+            *peeked_char != 10) break; // 10 == \n
         char *buffer_char = peek_nth(it, i);
         if (buffer_char == NULL) break;
         peeked_char = buffer_char;
@@ -192,6 +197,8 @@ void concatenate_into_token_str(Iterator *it, char *ptr, String *token_str, Toke
     for (char *char_ptr = ptr; !*token_found && char_ptr != NULL; char_ptr = next(it)) {
         char character = *char_ptr;
         char *peeked_char = next_non_space(it);
+//         printf("Curr: %c, Peeked: %c\n", character, *peeked_char);
+//         printf("Peeked is empty: %s\n", (*peeked_char == '\\') ? "true" : "false");
 
         if (token_type == String_Type 
             && is_string_terminating_char(*peeked_char) 
