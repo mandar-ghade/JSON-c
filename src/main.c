@@ -1,3 +1,4 @@
+#include "beautify.h"
 #include "vec.h"
 #include "string.h"
 #include "iterator.h"
@@ -17,8 +18,9 @@ char *read_file_to_buffer(FILE *f_ptr, char *file_name, char *buffer, size_t *bu
 
 void example_lookup(Object *json_object) {
     printf("\nExample lookup: \n");
-    Attribute user_id_0 = get_from_attr(index_from_attr(get(json_object, "users"), 0), "user_id");
-    print_attr(&user_id_0);
+    Attribute product_name_2 = get_from_attr(index_from_attr(get(json_object, "products"), 1), "name");
+    printf("Equivalent to Object.get(\"products\")[1].get(\"name\"): ");
+    print_attr(&product_name_2);
     printf("\n");
 }
 
@@ -34,9 +36,12 @@ int main() {
     Vec token_vec = tokenize(&buffer_str);
     Iterator it = iter_from_vec(&token_vec);
     Object *json_object = parse(&it);
+    printf("Parsed json object: \n");
     print_object(json_object);
-    printf("\n");
-    example_lookup(json_object);
+    printf("\n\n");
+    printf("Beautified json object: \n");
+    beautify(json_object, 4);
+    //example_lookup(json_object);
     free_object(json_object);
     free_token_vec(&token_vec);
     reset_str(&buffer_str);
