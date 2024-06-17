@@ -198,7 +198,6 @@ void concatenate_into_token_str(Iterator *it, char *ptr, String *token_str, Toke
     for (char *char_ptr = ptr; !*token_found && char_ptr != NULL; char_ptr = next(it)) {
         char character = *char_ptr;
         char *peeked_char = next_non_space(it);
-        printf("Curr: %c, Peeked: %c, %d\n", character, *peeked_char, *peeked_char);
 
         if (token_type == String_Type 
             && is_string_terminating_char(*peeked_char) 
