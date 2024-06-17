@@ -205,7 +205,7 @@ Attribute get_from_attr(Attribute attr, char *key) {
 }
 
 Attribute *get_attr_from_vec(const Vec *vec, size_t index) {
-    if (index > vec->len) {
+    if (index >= vec->len) {
         return NULL;
     }
     return (Attribute*)get_value(vec, index);
