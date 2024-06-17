@@ -120,7 +120,8 @@ char *next_non_space(Iterator *it) {
     char *peeked_char = peek(it);
     for (size_t i = 1; peeked_char != NULL; i++) {
         if (*peeked_char != ' ' &&
-            *peeked_char != 10) break; // 10 == \n
+            *peeked_char != 10 &&  // 10 == \n
+            *peeked_char != 9) break; // 9 == \t
         char *buffer_char = peek_nth(it, i);
         if (buffer_char == NULL) break;
         peeked_char = buffer_char;
@@ -197,8 +198,7 @@ void concatenate_into_token_str(Iterator *it, char *ptr, String *token_str, Toke
     for (char *char_ptr = ptr; !*token_found && char_ptr != NULL; char_ptr = next(it)) {
         char character = *char_ptr;
         char *peeked_char = next_non_space(it);
-//         printf("Curr: %c, Peeked: %c\n", character, *peeked_char);
-//         printf("Peeked is empty: %s\n", (*peeked_char == '\\') ? "true" : "false");
+        printf("Curr: %c, Peeked: %c, %d\n", character, *peeked_char, *peeked_char);
 
         if (token_type == String_Type 
             && is_string_terminating_char(*peeked_char) 
